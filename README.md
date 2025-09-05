@@ -1,17 +1,17 @@
 Manage Your Personal Finance with a Power BI Dashboard
 
-Track your spending habits, increase your savings, and monitor your investment portfolio
+Track your spending habits, increase your savings, and monitor your investment portfolio — all in one place.
 
-A practice project inspired by this YouTube tutorial (https://www.youtube.com/watch?v=RGkxrQcgtrg)
+Practice project inspired by this YouTube tutorial
 , expanded with my own ideas, data model tweaks, and visualization enhancements.
 
-Why this dashboard?
+Why this dashboard
 
-Track your spending habits: Daily and monthly views surface trends, spikes, and categories driving expenses.
+Track spending habits: Daily and monthly views surface trends, spikes, and categories driving expenses.
 
-Increase your savings: Clear KPIs, variance vs. prior month, and contribution-to-total help identify levers to save more.
+Increase savings: Clear KPIs, variance vs. prior month, and contribution-to-total highlight opportunities to save more.
 
-Track your investment portfolio: Dedicated visuals to follow balances and performance alongside cash accounts for a full net-worth snapshot.
+Monitor investments: Dedicated visuals track balances and performance alongside cash accounts for a full net-worth snapshot.
 
 🚀 What this repo contains
 
@@ -29,80 +29,64 @@ Add new features (rolling 12M view, arrow indicators, sparklines, contribution %
 
 ✨ Key Features
 
-Date dimension with Year/Quarter/Month/ISO Week, Month sort keys, Weekend flag
+Date dimension with Year / Quarter / Month / ISO Week, Month sort keys, Weekend flag
 
-Last 12 months rolling window (measure-based visual filter)
+Rolling last 12 months (measure-based visual filter)
 
 Month-over-Month (PM) comparisons, variance, and growth %
 
-Contribution-to-Total using ALL/ALLSELECTED variants
+Contribution-to-total using ALL / ALLSELECTED variants
 
-Conditional formatting (▲▼ arrows via UNICHAR, measure-driven colors)
+Conditional formatting (▲▼ via UNICHAR, measure-driven colors)
 
 In-cell sparklines using SVG generated from DAX (no custom visual)
 
 Locale-safe date parsing for dd/mm/yyyy sources (Power Query “Using Locale…”)
 
-🧱 Data Model
+🛠️ Getting Started
 
-Calendar (marked as Date table)
+Open the .pbix in Power BI Desktop.
 
-Columns: Date, Year, Month, Monthnum, Day, Weekday, DayOfWeekNum, ISO Week, Quarter, Weekend/Weekday
+If source dates are dd/mm/yyyy: Power Query → select date column → Data type → Using Locale… → Type: Date; Locale: English (United Kingdom) (or your D/M/Y locale).
 
-DailyBalance (fact)
+In Model view:
 
+Mark Calendar as Date table (Column = Date).
 
-🧮 DAX Highlights (snippets)
+Set Month → Sort by Monthnum; Weekday → Sort by DayOfWeekNum.
 
--- Core
-Total Amount = 
-SUM ( DailyBalance[Account Balance - Personal Checking] ) +
-SUM ( DailyBalance[Account Balance - Savings Account] )
+For the sparkline measure: select it → Data category = Image URL.
 
--- Previous Month comparison (full-month)
-Total Amount PM =
-CALCULATE ( [Total Amount], PREVIOUSMONTH ( 'Calendar'[Date] ) )
+📊 How to Use
 
-Variance = [Total Amount] - [Total Amount PM]
+Slicers: Account, Date (or force Last 12M via [Show Last 12M] = 1).
 
-Growth % =
-DIVIDE ( [Variance], [Total Amount PM] )
+Cards: Total, PM, Variance, Growth %.
 
--- Share of page/grand total (pick one)
-% of Page Total =
-DIVIDE ( [Total Amount], CALCULATE ( [Total Amount], REMOVEFILTERS ( 'Calendar' ) ) )
+Line chart: daily balances with continuous X-axis and Show items with no data = On.
 
-% of Grand Total =
-DIVIDE ( [Total Amount], CALCULATE ( [Total Amount], ALL ( DailyBalance ) ) )
+Matrix: category/segment + Contribution % + Sparkline.
 
--- Rolling last 12 months flag (use as Visual-level filter = 1)
-Show Last 12M :=
-VAR lastDate  = CALCULATE ( MAX ( 'Calendar'[Date] ), ALL ( 'Calendar'[Date] ) )
-VAR startDate = EOMONTH ( lastDate, -12 ) + 1
-VAR curDate   = MAX ( 'Calendar'[Date] )
-RETURN IF ( curDate >= startDate && curDate <= lastDate, 1, 0 )
+📁 Suggested Repo Structure
+/data
+  daily_balance_sample.csv
+/models
+  finance_dashboard.pbix
+/docs
+  screenshots/
+  measures.md
+README.md
 
--- Arrow display for Growth %
-Growth % Arrow :=
-VAR up   = UNICHAR(9650)   -- ▲
-VAR down = UNICHAR(9660)   -- ▼
-VAR g    = [Growth %]
-RETURN
-IF ( ISBLANK ( g ), BLANK(),
-     IF ( g >= 0, "+ " & FORMAT(g,"0.0%") & " " & up,
-                 FORMAT(g,"0.0%") & " " & down ) )
+🖼️ Screenshots / Demo
 
+(Add a few PNGs or a short GIF showing: KPIs & line chart, matrix with sparkline/arrows, and the Last 12M behavior.)
 
 🙌 Credits
 
-Tutorial inspiration: the video by How to Power BI — https://www.youtube.com/watch?v=RGkxrQcgtrg
+Tutorial inspiration: How to Power BI — https://www.youtube.com/watch?v=RGkxrQcgtrg
 
 Additional DAX patterns, formatting ideas, and enhancements were created by me for learning/demo purposes.
 
 📄 License / Use
 
-This repo is for learning & demonstration.
-
-Date, Account Balance - Personal Checking, Account Balance - Savings Account
-
-Relationship: Calendar[Date] → DailyBalance[Date] (single direction).
+This repo is for learning & demonstration. Replace sample data with your own before using in production.
