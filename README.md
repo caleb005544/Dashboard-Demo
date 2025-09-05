@@ -3,11 +3,12 @@ Manage Your Personal Finance with a Power BI Dashboard
 Track your spending habits, increase your savings, and monitor your investment portfolio — all in one place.
 
 Practice project inspired by this YouTube tutorial
+
 , expanded with my own ideas, data model tweaks, and visualization enhancements.
 
 Why this dashboard
 
-Track spending habits: Daily and monthly views surface trends, spikes, and categories driving expenses.
+Track spending habits: Daily and monthly views expense trends, spikes, and categories driving expenses.
 
 Increase savings: Clear KPIs, variance vs. prior month, and contribution-to-total highlight opportunities to save more.
 
@@ -67,23 +68,9 @@ Line chart: daily balances with continuous X-axis and Show items with no data = 
 
 Matrix: category/segment + Contribution % + Sparkline.
 
-📁 Suggested Repo Structure
-/data
-  daily_balance_sample.csv
-/models
-  finance_dashboard.pbix
-/docs
-  screenshots/
-  measures.md
-README.md
-
-🖼️ Screenshots / Demo
-
-(Add a few PNGs or a short GIF showing: KPIs & line chart, matrix with sparkline/arrows, and the Last 12M behavior.)
-
 🙌 Credits
 
-Tutorial inspiration: How to Power BI — https://www.youtube.com/watch?v=RGkxrQcgtrg
+Tutorial inspiration: Take control of your finances today with Power BI! — https://www.youtube.com/watch?v=RGkxrQcgtrg
 
 Additional DAX patterns, formatting ideas, and enhancements were created by me for learning/demo purposes.
 
